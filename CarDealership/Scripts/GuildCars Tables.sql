@@ -1,0 +1,139 @@
+USE GuildCars
+GO
+
+--Drop Tables--
+IF EXISTS ( SELECT * FROM sys.tables WHERE name ='SaleItems')
+	DROP TABLE SaleItems
+GO
+
+IF EXISTS ( SELECT * FROM sys.tables WHERE name ='Contacts')
+	DROP TABLE Contacts
+GO
+
+IF EXISTS ( SELECT * FROM sys.tables WHERE name ='Vehicles')
+	DROP TABLE Vehicles
+GO
+
+IF EXISTS ( SELECT * FROM sys.tables WHERE name ='Models')
+	DROP TABLE Models
+GO
+
+IF EXISTS ( SELECT * FROM sys.tables WHERE name ='Makes')
+	DROP TABLE Makes
+GO
+
+IF EXISTS ( SELECT * FROM sys.tables WHERE name ='Colors')
+	DROP TABLE Colors
+GO
+
+IF EXISTS ( SELECT * FROM sys.tables WHERE name ='Interiors')
+	DROP TABLE Interiors
+GO
+
+IF EXISTS ( SELECT * FROM sys.tables WHERE name ='States')
+	DROP TABLE States
+GO
+
+IF EXISTS ( SELECT * FROM sys.tables WHERE name ='Specials')
+	DROP TABLE Specials
+GO
+
+
+
+
+
+
+--Create Tables--
+
+CREATE TABLE Makes (
+	MakeId INT IDENTITY(1,1) PRIMARY KEY,
+	MakeName NVARCHAR(30) NOT NULL,
+	DateAdded DATE DEFAULT(GETDATE()),
+	UserId NVARCHAR(128) FOREIGN KEY REFERENCES AspNetUsers(Id),
+)
+
+
+
+CREATE TABLE Models (
+	ModelId INT IDENTITY(1,1) PRIMARY KEY,
+	MakeId INT FOREIGN KEY REFERENCES Makes(MakeId),
+	ModelName NVARCHAR(30) NOT NULL,
+	DateAdded DATE DEFAULT(GETDATE()),
+	UserId NVARCHAR(128) FOREIGN KEY REFERENCES AspNetUsers(Id),
+)
+
+
+
+CREATE TABLE Colors (
+	ColorId INT IDENTITY(1,1) PRIMARY KEY,
+	ColorName NVARCHAR(30) NOT NULL
+)
+
+
+CREATE TABLE Interiors (
+	InteriorId INT IDENTITY(1,1) PRIMARY KEY,
+	InteriorName NVARCHAR(30) NOT NULL
+)
+
+
+CREATE TABLE Vehicles (
+	VIN CHAR(17) PRIMARY KEY,
+	New BIT,
+	[Year] INT NOT NULL,
+	ModelId INT FOREIGN KEY REFERENCES Models(ModelId) NOT NULL,
+	BodyStyle INT NOT NULL,
+	ColorId INT FOREIGN KEY REFERENCES Colors(ColorId) NOT NULL,
+	InteriorId INT FOREIGN KEY REFERENCES Interiors(InteriorId) NOT NULL,
+	Transmission INT NOT NULL,
+	Mileage INT NOT NULL,
+	SalePrice DECIMAL(9,2) NOT NULL,
+	MSRP DECIMAL(9,2) NOT NULL,
+	[Description] NVARCHAR(180) NOT NULL,
+	Featured BIT,
+	Sold BIT,
+	ImageFileName NVARCHAR(200) NOT NULL,	
+)
+
+
+CREATE TABLE Contacts (
+	ContactId INT IDENTITY(1,1) PRIMARY KEY,
+	VIN CHAR(17) FOREIGN KEY REFERENCES Vehicles(VIN),
+	FirstName NVARCHAR(100) NOT NULL,
+	LastName NVARCHAR(100) NOT NULL,
+	Email NVARCHAR(100) NULL,
+	Phone NVARCHAR(30) NULL,
+	[Message] NVARCHAR(250),
+	Contacted BIT
+)
+
+
+CREATE TABLE States (
+	StateId CHAR(2) PRIMARY KEY,
+	StateName NVARCHAR(20) NOT NULL
+)
+
+
+CREATE TABLE SaleItems (
+	SaleId INT IDENTITY(1,1) PRIMARY KEY,
+	VIN CHAR(17) FOREIGN KEY REFERENCES Vehicles(VIN) NOT NULL,
+	UserId NVARCHAR(128) FOREIGN KEY REFERENCES AspNetUsers(Id),
+	FirstName NVARCHAR(100) NOT NULL,
+	LastName NVARCHAR(100) NOT NULL,
+	Email NVARCHAR(100) NULL,
+	Phone NVARCHAR(30) NULL,
+	Street1 NVARCHAR(100) NOT NULL,
+	Street2 NVARCHAR(100) NULL,
+	StateId CHAR(2) FOREIGN KEY REFERENCES States(StateId) NOT NULL,
+	City NVARCHAR(50) NOT NULL,
+	Zipcode INT NOT NULL,
+	PurchasePrice DECIMAL(9,2) NOT NULL,
+	PurchaseType INT NOT NULL
+)
+
+
+CREATE TABLE Specials (
+	SpecialId INT IDENTITY(1,1) PRIMARY KEY,
+	SpecialName NVARCHAR(30),
+	[Description] NVARCHAR(250) NOT NULL,
+	ImageFileName NVARCHAR(200) NOT NULL
+)

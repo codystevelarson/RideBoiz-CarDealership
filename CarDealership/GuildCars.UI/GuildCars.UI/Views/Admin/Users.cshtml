@@ -1,0 +1,109 @@
+﻿@model GuildCars.UI.Models.UserGroupVM
+
+@{
+    ViewBag.Title = "Users";
+}
+<div class="container">
+    <h2>Users</h2>
+
+    @Html.ActionLink("Add User", "AddUser", null, new { @class = "btn btn-primary" })
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Admins:</h3>
+        </div>
+        <div class="table-responsive">
+            <div class="col-md-12">
+                <table class=" table table-hover">
+                    <thead style="font-weight:bold">
+                        <tr>
+                            <td align="left">Last Name</td>
+                            <td align="left">First Name</td>
+                            <td align="left">Email</td>
+                            <td align="left">Role</td>
+                            <td align="left"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Admins)
+                        {
+                            <tr class="table-primary">
+                                <td>@user.FirstName</td>
+                                <td>@user.LastName</td>
+                                <td>@user.Email</td>
+                                <td>@user.Role</td>
+                                <td align="right">@Html.ActionLink("Edit User", "EditUser", new { user.Id }, new { @class = "btn btn-info" })</td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Sales:</h3>
+        </div>
+        <div class="table-responsive">
+            <div class="col-md-12">
+                <table class="table table-hover ">
+                    <thead style="font-weight:bold">
+                        <tr>
+                            <td align="left">Last Name</td>
+                            <td align="left">First Name</td>
+                            <td align="left">Email</td>
+                            <td align="left">Role</td>
+                            <td align="left"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Sales)
+                        {
+                            <tr class="table-success">
+                                <td>@user.FirstName</td>
+                                <td>@user.LastName</td>
+                                <td>@user.Email</td>
+                                <td>@user.Role</td>
+                                <td align="right">@Html.ActionLink("Edit User", "EditUser", new { user.Id }, new { @class = "btn btn-info" })</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Disabled:</h3>
+        </div>
+        <div class="table-responsive">
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead style="font-weight:bold">
+                        <tr>
+                            <td align="left">Last Name</td>
+                            <td align="left">First Name</td>
+                            <td align="left">Email</td>
+                            <td align="left">Role</td>
+                            <td align="left"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Disabled)
+                        {
+                            <tr class="table-danger">
+                                <td>@user.FirstName</td>
+                                <td>@user.LastName</td>
+                                <td>@user.Email</td>
+                                <td>@user.Role</td>
+                                <td align="right">@Html.ActionLink("Edit User", "EditUser", new { user.Id }, new { @class = "btn btn-info" })</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

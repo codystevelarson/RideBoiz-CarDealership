@@ -1,0 +1,77 @@
+﻿@model GuildCars.UI.Models.ContactVM
+@{
+    ViewBag.Title = "Contact";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="padding: 10px">
+            <h3>Contact Us</h3>
+
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @using (Html.BeginForm("Contact", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Contact.FirstName, "First Name",new { @class = "col-md-4 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Contact.FirstName, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Contact.LastName, "Last Name",new { @class = "col-md-4 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Contact.LastName, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Contact.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Contact.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Contact.Phone, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Contact.Phone, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Contact.VIN, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Contact.VIN, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Contact.Message, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(m => m.Contact.Message, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-primary" value="Send" />
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-6">
+            <br />
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4721.498904213787!2d-93.43000802435311!3d45.27973307363274!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1522008264570" width="400" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+            <address>
+                <span style="font-weight: bold">Ride Boiz</span><br />
+                17000 Yttrium St. NW<br />
+                Ramsey, MN 55303<br />
+                <abbr title="Phone">P:</abbr>
+                555.753.5232
+            </address>
+        </div>
+    </div>
+</div>
+

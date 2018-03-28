@@ -1,0 +1,58 @@
+﻿@model GuildCars.UI.Models.MakesVM
+
+@{
+    ViewBag.Title = "Makes";
+}
+
+<div class="container">
+    <h2>Makes</h2>
+
+    @using (Html.BeginForm("AddMake", "Admin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.Make.MakeName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Make.MakeName, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-primary" value="Save" />
+            </div>
+        </div>
+    }
+
+
+    <hr />
+    <div class="row">
+        <div class="table-responsive">
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead style="font-weight: bold">
+                        <tr>
+                            <td align="left">Make</td>
+                            <td align="left">Date Added</td>
+                            <td align="left">User</td>
+                            <td align="left"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var make in Model.Makes)
+                        {
+                            <tr>
+                                <td>@make.MakeName</td>
+                                <td>@make.DateAdded.ToString("dd/MM/yyyy")</td>
+                                <td>@make.UserName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

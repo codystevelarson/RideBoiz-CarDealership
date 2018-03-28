@@ -1,0 +1,64 @@
+﻿@model GuildCars.UI.Models.CarModelsVM
+
+@{
+    ViewBag.Title = "Models";
+}
+
+<div class="container">
+    <h2>Models</h2>
+
+    @using (Html.BeginForm("AddModel", "Admin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.CarModel.ModelName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.CarModel.ModelName, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Makes, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.Makes, Model.Makes, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-primary" value="Save" />
+            </div>
+        </div>
+    }
+
+
+    <hr />
+    <div class="row">
+        <div class="table-responsive">
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead style="font-weight: bold">
+                        <tr>
+                            <td align="left">Model</td>
+                            <td align="left">Make</td>
+                            <td align="left">Date Added</td>
+                            <td align="left">User</td>
+                            <td align="left"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var carModel in Model.CarModels)
+                        {
+                        <tr>
+                            <td>@carModel.ModelName</td>
+                            <td>@carModel.MakeName</td>
+                            <td>@carModel.DateAdded.ToString("dd/MM/yyyy")</td>
+                            <td>@carModel.UserName</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
