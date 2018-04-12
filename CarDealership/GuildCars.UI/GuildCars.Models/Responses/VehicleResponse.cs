@@ -9,6 +9,7 @@ namespace GuildCars.Models.Responses
 {
     public class VehicleResponse : Response
     {
+        public List<Vehicle> Vehicles { get; set; }
         public Vehicle Vehicle { get; set; }
     }
 }

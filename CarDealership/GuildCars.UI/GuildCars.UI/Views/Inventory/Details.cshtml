@@ -1,0 +1,76 @@
+﻿@model GuildCars.UI.Models.VehicleVM
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+
+    <h2>Vehicle Details</h2>
+    <div class="card" style="padding: 10px">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="vehicle-detail">@Model.Vehicle.Year @Model.Vehicle.Model.Make.MakeName @Model.Vehicle.Model.ModelName</p>
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="~/Images/Vehicles/@Model.Vehicle.ImageFileName" class="img-thumbnail" alt="@Model.Vehicle.ImageFileName" />
+                    </div>
+
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-4 nopadding">
+                                <p><span class="vehicle-detail">Body Style:</span> @Model.Vehicle.BodyStyle</p>
+                                <p><span class="vehicle-detail">Transmission:</span> @Model.Vehicle.Transmission</p>
+                                <p><span class="vehicle-detail">Color:</span> @Model.Vehicle.Color.ColorName</p>
+                            </div>
+                            <div class="col-md-4 nopadding">
+                                <p><span class="vehicle-detail">Interior:</span> @Model.Vehicle.Interior.InteriorName</p>
+                                @if (Model.Vehicle.New)
+                                {
+                                    <p><span class="vehicle-detail">Mileage:</span> New</p>
+                                }
+                                else
+                                {
+                                    <p><span class="vehicle-detail">Mileage:</span> @Model.Vehicle.Mileage</p>
+
+                                }
+                                <p><span class="vehicle-detail">VIN:</span> @Model.Vehicle.VIN</p>
+                            </div>
+                            <div class="col-md-4 nopadding">
+                                <p><span class="vehicle-detail">Sale Price:</span> $@Model.Vehicle.SalePrice</p>
+                                <p><span class="vehicle-detail">MSRP:</span> $@Model.Vehicle.MSRP</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 nopadding">
+                                <p><span class="vehicle-detail">Description:</span></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>@Model.Vehicle.Description</p>
+                            </div>
+                        </div>
+                        @if (!Model.Vehicle.Sold)
+                        {
+                            <div class="row">
+                                <div class="offset-10">
+                                    @Html.ActionLink("Contact Us", "Contact", "Home", new { vin = Model.Vehicle.VIN }, new { @class = "btn btn-danger" })
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.Vehicle.Sold)
+    {
+        <div class="row">
+            <div class="offset-11">
+                <img src="~/Images/Site/sold.png" alt="sold tag" style="vertical-align: bottom" />
+            </div>
+        </div>
+    }
+
+
+</div>

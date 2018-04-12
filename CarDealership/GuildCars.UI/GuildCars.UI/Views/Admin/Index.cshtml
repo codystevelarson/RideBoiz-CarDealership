@@ -3,24 +3,40 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Admin Index</h2>
-<ul>
-    <li>
-        @Html.ActionLink("Vehicles", "Vehicles", "Admin")
-    </li>
-    <li>
-        @Html.ActionLink("Makes", "Makes", "Admin")
-    </li>
-    <li>
-        @Html.ActionLink("Models", "Models", "Admin")
-    </li>
-    <li>
-        @Html.ActionLink("Reports", "Index", "Reports")
-    </li>
-    <li>
-        @Html.ActionLink("User List", "Users", "Admin")
-    </li>
-</ul>
+<div class="container">
+    <h2>Admin</h2>
+    <div class="row">
+        <div class="col-md-2">
+            @Html.ActionLink("Vehicles", "Vehicles", "Admin", new { @class = "btn btn-lg btn-primary btn-block" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.ActionLink("Makes", "Makes", "Admin", new { @class = "btn btn-lg btn-outline-dark btn-block" })
+        </div>
+        <div class="col-md-2">
+            @Html.ActionLink("Models", "Models", "Admin", new { @class = "btn btn-lg btn-outline-dark btn-block" })
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.ActionLink("Reports", "Index", "Reports", new { @class = "btn btn-lg btn-success btn-block" })
+        </div>
+        <div class="col-md-2">
+            @Html.ActionLink("User List", "Users", "Admin", new { @class = "btn btn-lg btn-info btn-block" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.ActionLink("User List", "Users", "Admin", new { @class = "btn btn-lg btn-info btn-block" })
+        </div>
+    </div>
+</div>
+
 
 
 

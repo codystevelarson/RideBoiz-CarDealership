@@ -1,12 +1,11 @@
-﻿using System;
+﻿using GuildCars.UI.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using GuildCars.UI.Models;
 
 namespace GuildCars.UI.Controllers
 {
@@ -215,6 +214,7 @@ namespace GuildCars.UI.Controllers
 
         //
         // GET: /Manage/ChangePassword
+        [Authorize(Roles = "Admin, Sales")]
         public ActionResult ChangePassword()
         {
             return View();
@@ -222,6 +222,7 @@ namespace GuildCars.UI.Controllers
 
         //
         // POST: /Manage/ChangePassword
+        [Authorize(Roles = "Admin, Sales")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)

@@ -1,10 +1,6 @@
 ﻿using GuildCars.BLL.Factories;
 using GuildCars.Models.Tables;
 using GuildCars.UI.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace GuildCars.UI.Controllers
@@ -18,33 +14,31 @@ namespace GuildCars.UI.Controllers
 
             var vehicleManager = VehicleManagerFactory.Create();
             var vehicleResponse = vehicleManager.GetAllFeatured();
-            if(vehicleResponse.Success == true)
+            if(vehicleResponse.Success)
             {
                 model.FeaturedVehicles = vehicleResponse.Vehicles;
             }
 
             var specialManager = SpecialManagerFactory.Create();
             var specialResponse = specialManager.GetAll();
-            if(specialResponse.Success == true)
+            if(specialResponse.Success)
             {
                 model.Specials = specialResponse.Specials;
             }
 
-            //What to do if success' are false??
             return View(model);
         }
 
         [HttpGet]
         public ActionResult Specials()
         {
-            var model = new SpecialsVM();
+            var model = new SpecialVM();
             var manager = SpecialManagerFactory.Create();
             var specialResponse = manager.GetAll();
             if (specialResponse.Success == true)
             {
                 model.Specials = specialResponse.Specials;
             }
-            //What to do if success is false?? 
             return View(model);
         }
 
@@ -52,9 +46,28 @@ namespace GuildCars.UI.Controllers
         public ActionResult Contact(string vin)
         {
             var model = new ContactVM();
-            if (vin != null)
+
+            if (!string.IsNullOrEmpty(vin))
             {
-                model.Contact.VIN = vin;
+                model.Contact = new Contact
+                {
+                    VIN = vin
+                };
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Contact(ContactVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var manager = ContactManagerFactory.Create();
+                var response = manager.Add(model.Contact);
+                if (response.Success == true)
+                {
+                    return RedirectToAction("Index");
+                }
             }
             return View(model);
         }

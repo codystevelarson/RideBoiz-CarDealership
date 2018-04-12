@@ -1,7 +1,85 @@
-﻿
+﻿@model GuildCars.UI.Models.SearchVM
 @{
     ViewBag.Title = "New";
 }
 
-<h2>New Vehicles</h2>
 
+<div class="container">
+    <h2>New Vehicles</h2>
+    @Html.Partial("_SearchBar")
+
+</div>
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#searchForm").submit(function (e) {
+                search();
+                return false;
+            });
+        });
+        function search() {
+            var params;
+            var imagePath = '@Url.Content("~/Images/Vehicles/")';
+            var detailsPath = '@Url.Action("Details", "Inventory")/'
+            params = 'view=New' + '&vehicleSearch=' + $('#vehicleSearch').val() + '&minPrice=' + $('#minPrice').val() + '&maxPrice=' +
+                $('#maxPrice').val() + '&minYear=' + $('#minYear').val() + '&maxYear=' + $('#maxYear').val()
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:50948/api/inventory/search?' + params,
+                success: function (data) {
+                    $('#searchResults').empty();
+                    $.each(data, function (index, search) {
+                        var html = '<div class="card" style="padding: 10px">'
+                        html = '<div class="row">'
+                        html += '<div class="col-md-12">'
+                        html += '<p class="vehicle-detail">' + search.Vehicle.Year + ' ' + search.Vehicle.Model.Make.MakeName + ' ' + search.Vehicle.Model.ModelName + '</p>'
+                        html += '<div class="row">'
+                        html += '<div class="col-md-2">'
+                        html += '<img src="' + imagePath + search.Vehicle.ImageFileName + '"class="img-thumbnail" alt="' + search.Vehicle.ImageFileName + '" />'
+                        html += '</div>'
+                        html += '<div class="col-md-10">'
+                        html += '<div class="row">'
+                        html += '<div class="col-md-4 nopadding">'
+                        html += '<p> <span class="vehicle-detail">Body Style: </span>' + search.BodyType + '</p>'
+                        html += '<p> <span class="vehicle-detail">Transmission: </span>' + search.Transmission + '</p>'
+                        html += '<p> <span class="vehicle-detail">Color: </span>' + search.Vehicle.Color.ColorName + '</p>'
+                        html += '</div>'
+                        html += '<div class="col-md-4">'
+                        html += '<p> <span class="vehicle-detail">Interior: </span>' + search.Vehicle.Interior.InteriorName + '</p>'
+                        if (search.Vehicle.New == true) {
+                            html += '<p> <span class="vehicle-detail">Mileage: </span>New</p>'
+                        }
+                        else {
+                            html += '<p> <span class="vehicle-detail">Mileage: </span>' + search.Vehicle.Mileage + '</p>'
+                        }
+                        html += '<p> <span class="vehicle-detail">VIN: </span>' + search.Vehicle.VIN + '</p>'
+                        html += '</div>'
+                        html += '<div class="col-md-4 nopadding">'
+                        html += '<p><span class="vehicle-detail">Sale Price: </span>$' + search.Vehicle.SalePrice + '</p>'
+                        html += '<p><span class="vehicle-detail">MSRP: </span>$' + search.Vehicle.MSRP + '</p>'
+                        html += '</div>'
+                        html += '</div>'
+                        html += '<div class="row">'
+                        html += '<div class="col-md-2 offset-10">'
+                        html += '<a href="' + detailsPath + search.Vehicle.VIN + '" class="btn btn-danger btn-block">Details</a>'
+                        html += '</div>'
+                        html += '</div>'
+                        html += '</div>'
+                        html += '</div>'
+                        html += '</div>'
+                        html += '</div>'
+                        html += '</div>'
+                        $('#searchResults').append(html.toString());
+                    })
+                },
+                error: function () {
+                    alert('Error performing search, try again later')
+                }
+            })
+        }
+    </script>
+
+}

@@ -9,10 +9,8 @@ DELETE FROM Makes
 DELETE FROM Interiors
 DELETE FROM Specials
 DELETE FROM States
+DELETE FROM Contacts
 
-
---TODO
---Add: Contacts, SaleItems & Vehicles
 
 SET IDENTITY_INSERT Colors ON 
 INSERT INTO Colors (ColorId,ColorName)
@@ -122,6 +120,6 @@ INSERT INTO Vehicles (VIN, New, [Year], ModelId, BodyStyle, ColorId, InteriorId,
 
 SET IDENTITY_INSERT SaleItems ON
 INSERT INTO SaleItems(SaleId, VIN, UserId, FirstName, LastName, Email, Phone, Street1, Street2, City, StateId, Zipcode, PurchasePrice, PurchaseType)
-	VALUES(1,'00000000000000004', '2f0d4a6b-1e7b-4035-8557-d3a09adefc7c', 'Cody', 'Larson', 'clarson@cody.com', '6127993875', '17000 Yttrium St. NW', '#3', 'Ramsey', 'MN', 55303, 26500, 2)
+	VALUES(1,'00000000000000004', '57383afa-9157-4d24-86cf-2e1a097b29f4', 'Cody', 'Larson', 'clarson@cody.com', '6127993875', '17000 Yttrium St. NW', '#3', 'Ramsey', 'MN', 55303, 26500, 2)
 SET IDENTITY_INSERT SaleItems OFF
 

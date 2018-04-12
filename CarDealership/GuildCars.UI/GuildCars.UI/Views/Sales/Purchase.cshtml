@@ -4,5 +4,157 @@
     ViewBag.Title = "Purchase";
 }
 
-<h2>Purchase</h2>
+
+<div class="container">
+    <h2>Purchase Vehicle</h2>
+
+    <div class="card" style="padding: 10px">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="vehicle-detail">@Model.Vehicle.Year @Model.Vehicle.Model.Make.MakeName @Model.Vehicle.Model.ModelName</p>
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="~/Images/Vehicles/@Model.Vehicle.ImageFileName" class="img-thumbnail" alt="@Model.Vehicle.ImageFileName" />
+                    </div>
+
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-4 nopadding">
+                                <p><span class="vehicle-detail">Body Style:</span> @Model.Vehicle.BodyStyle</p>
+                                <p><span class="vehicle-detail">Transmission:</span> @Model.Vehicle.Transmission</p>
+                                <p><span class="vehicle-detail">Color:</span> @Model.Vehicle.Color.ColorName</p>
+                            </div>
+                            <div class="col-md-4 nopadding">
+                                <p><span class="vehicle-detail">Interior:</span> @Model.Vehicle.Interior.InteriorName</p>
+                                @if (Model.Vehicle.New)
+                                {
+                                    <p><span class="vehicle-detail">Mileage:</span> New</p>
+                                }
+                                else
+                                {
+                                    <p><span class="vehicle-detail">Mileage:</span> @Model.Vehicle.Mileage</p>
+
+                                }
+                                <p><span class="vehicle-detail">VIN:</span> @Model.Vehicle.VIN</p>
+                            </div>
+                            <div class="col-md-4 nopadding">
+                                <p><span class="vehicle-detail">Sale Price:</span> $@Model.Vehicle.SalePrice</p>
+                                <p><span class="vehicle-detail">MSRP:</span> $@Model.Vehicle.MSRP</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 nopadding">
+                                <p><span class="vehicle-detail">Description:</span></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>@Model.Vehicle.Description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class=" col-md-12">
+            @using (Html.BeginForm("Purchase", "Sales", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.SaleItem.VIN)
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.FirstName, "First Name", new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.SaleItem.FirstName, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.LastName, "Last Name", new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.SaleItem.LastName, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.Phone, new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.SaleItem.Phone, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.Email, new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.SaleItem.Email, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.Street1, "Street 1", new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.SaleItem.Street1, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.Street2, "Street 2", new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.SaleItem.Street2, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.City, new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.SaleItem.City, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.StateId, "State", new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.DropDownListFor(m => m.SaleItem.StateId, Model.States, "--State--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.Zipcode, new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.SaleItem.Zipcode, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.PurchasePrice, "Purchase Price", new { @class = "col-md-8 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.SaleItem.PurchasePrice, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SaleItem.PurchaseType, "Purchase Type", new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.DropDownListFor(m => m.SaleItem.PurchaseType, Model.PurchaseTypes, "--Purchase Type--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" class="btn btn-danger" value="Purchase!" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
 

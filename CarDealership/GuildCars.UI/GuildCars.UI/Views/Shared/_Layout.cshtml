@@ -10,11 +10,10 @@
 <body>
     <div class="navbar navbar-expand-md navbar-dark bg-dark" role="navigation">
         <span class="navbar-brand mb-0 h1">
-            <a href="@Url.Action("Index", "Home")" tit le="Ride Boiz" class="navbar-link">
+            <a href="@Url.Action("Index", "Home")" title="Ride Boiz" class="navbar-link">
                 <img src="~/Images/Site/logo.jpg" id="navLogo" alt="nav logo" style="max-height:50px" />
             </a>
         </span>
-
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,17 +21,23 @@
         <div class="navbar-collapse collapse" id="navbarSupportedContent">
             <ul class="nav navbar-nav">
                 <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("New Inventory", "New", "Inventory", null, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Used Inventory", "Used", "Inventory", null, new { @class = "nav-link" })</li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="inventoryDropdownMenuLink" data-toggle="dropdown">
+                        Inventory
+                    </a>
+                    <div class="dropdown-menu">
+                        @Html.ActionLink("New Inventory", "New", "Inventory", null, new { @class = "nav-link dropdown-item", style = "color:black" })
+                        @Html.ActionLink("Used Inventory", "Used", "Inventory", null, new { @class = "nav-link dropdown-item", style = "color:black" })
+                    </div>
+                </li>
+
                 @if (User.IsInRole("Admin"))
                 {
                     <li class="nav-item">@Html.ActionLink("Specials", "Specials", "Admin", null, new { @class = "nav-link" })</li>
-
                 }
                 else
                 {
                     <li class="nav-item">@Html.ActionLink("Specials", "Specials", "Home", null, new { @class = "nav-link" })</li>
-
                 }
                 <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
 
@@ -43,7 +48,20 @@
                 }
                 @if (User.IsInRole("Admin"))
                 {
-                    <li class="nav-item">@Html.ActionLink("Admin", "Index", "Admin", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdownMenuLink" data-toggle="dropdown">
+                            Admin
+                        </a>
+                        <div class="dropdown-menu">
+                            @Html.ActionLink("Vehicles", "Vehicles", "Admin", null, new { @class = "nav-link dropdown-item", style = "color:black" })
+                            @Html.ActionLink("Makes", "Makes", "Admin", null, new { @class = "nav-link dropdown-item", style = "color:black" })
+                            @Html.ActionLink("Models", "Models", "Admin", null, new { @class = "nav-link dropdown-item", style = "color:black" })
+                            @Html.ActionLink("Reports", "Index", "Reports", null, new { @class = "nav-link dropdown-item", style = "color:black" })
+                            @Html.ActionLink("User List", "Users", "Admin", null, new { @class = "nav-link dropdown-item", style = "color:black" })
+                            @Html.ActionLink("Change your password", "ChangePassword", "Admin", null, new { @class = "nav-link dropdown-item", style = "color:black" })
+                        </div>
+                    </li>
+                    
                 }
             </ul>
             <div>
@@ -52,7 +70,7 @@
         </div>
     </div>
 
-    <div class="container body-content">
+    <div class="body-content">
         @RenderBody()
         <hr />
 

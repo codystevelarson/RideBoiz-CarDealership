@@ -41,12 +41,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factories\CarModelManagerFactory.cs" />
+    <Compile Include="Factories\ColorManagerFactory.cs" />
+    <Compile Include="Factories\ContactManagerFactory.cs" />
+    <Compile Include="Factories\InteriorManagerFactory.cs" />
     <Compile Include="Factories\MakeManagerFactory.cs" />
+    <Compile Include="Factories\SaleItemManagerFactory.cs" />
     <Compile Include="Factories\SpecialManagerFactory.cs" />
     <Compile Include="Factories\StateManagerFactory.cs" />
     <Compile Include="Factories\VehicleManagerFactory.cs" />
     <Compile Include="Managers\CarModelManager.cs" />
+    <Compile Include="Managers\ColorManager.cs" />
+    <Compile Include="Managers\ContactManager.cs" />
+    <Compile Include="Managers\InteriorManager.cs" />
     <Compile Include="Managers\MakeManager.cs" />
+    <Compile Include="Managers\SaleItemManager.cs" />
     <Compile Include="Managers\SpecialManager.cs" />
     <Compile Include="Managers\StateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

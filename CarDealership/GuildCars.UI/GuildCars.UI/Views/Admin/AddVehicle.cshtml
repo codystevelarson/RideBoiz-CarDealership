@@ -1,0 +1,192 @@
+﻿@model GuildCars.UI.Models.VehicleVM
+
+@{
+    ViewBag.Title = "AddVehicle";
+}
+
+<div class="container">
+    <h2>Add Vehicle</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("AddVehicle", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.VIN, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Vehicle.VIN, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.Year, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Vehicle.Year, new { @class = "form-control", type = "Number" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.New, new { @class = "col-md-2 control-label form-check-lable" })
+                        <div class="col-md-2 offset-1">
+                            @Html.CheckBoxFor(m => m.Vehicle.New, new { @class = "form-control form-check-input big-checkbox offset-1" })
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.Model.Make, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.Vehicle.Model.Make.MakeId, Model.MakeList, "--Make--", new { @class = "form-control", id = "makes" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.Model, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.Vehicle.Model.ModelId, Model.ModelList, "--Model--", new { @class = "form-control", id = "models" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.BodyStyle, "Body Style", new { @class = "col-md-4 control-label" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.Vehicle.BodyStyle, Model.BodyStyle, "--Body Style--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.Color, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.Vehicle.Color.ColorId, Model.ColorList, "--Color--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.Interior, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.Vehicle.Interior.InteriorId, Model.InteriorList, "--Interior--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.Transmission, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.Vehicle.Transmission, Model.Transmissions, "--Transmission--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.Mileage, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Vehicle.Mileage, new { @class = "form-control", type = "Number" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.SalePrice, "Sale Price", new { @class = "col-md-4 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Vehicle.SalePrice, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Vehicle.MSRP, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Vehicle.MSRP, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-8">
+                        @Html.LabelFor(m => m.Vehicle.Description, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-11">
+                            @Html.TextAreaFor(m => m.Vehicle.Description, new { @class = "form-control col-md-12", style = "height:150px" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.VehicleImage, "Vehicle Image", new { @class = "col-md-5 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.VehicleImage, new { type = "file", accept = "image/png, image/jpg, image/jpeg" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#makes").change(function (e) {
+                var makeVal = $(this).find(':selected').val();
+                var makeText = $(this).find(':selected').text();
+                if (makeVal > 0) {
+                    getModels();
+                }
+                return false;
+            });
+            $("#models").change(function (e) {
+                var modelVal = $(this).find(':selected').val();
+                var modelText = $(this).find(':selected').text();
+                if (modelVal > 0) {
+                    getMake();
+                }
+                return false;
+            });
+        });
+
+        function getModels() {
+            var makeVal = $("#makes").find(':selected').val();
+            var makeText = $("#makes").find(':selected').text();
+            var params = '&makeid=' + makeVal
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:50948/api/get/models?' + params,
+                success: function (data) {
+                    $('#models').empty();
+                    $.each(data, function (index, models) {
+                        var modelList = "<option value=" + models.ModelId + ">" + models.ModelName + "</option>";
+                        $(modelList).appendTo("#models")
+                    })
+                },
+                error: function () {
+                    alert('Error finding models for make ' + makeText)
+                }
+            })
+        }
+
+        function getMake() {
+            var modelVal = $("#models").find(':selected').val();
+            var modelText = $("#models").find(':selected').text();
+            var params = '&modelId=' + modelVal
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:50948/api/get/make?' + params,
+                success: function (make) {
+                    $('#makes').val(make.MakeId);
+                },
+                error: function () {
+                    alert('Error finding make for model ' + modelText)
+                }
+            })
+        }
+    </script>
+
+}

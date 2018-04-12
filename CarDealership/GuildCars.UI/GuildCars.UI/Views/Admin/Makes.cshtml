@@ -1,10 +1,12 @@
-﻿@model GuildCars.UI.Models.MakesVM
+﻿@model GuildCars.UI.Models.MakeVM
 
 @{
     ViewBag.Title = "Makes";
 }
 
+
 <div class="container">
+
     <h2>Makes</h2>
 
     @using (Html.BeginForm("AddMake", "Admin", FormMethod.Post))
@@ -13,7 +15,7 @@
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(m => m.Make.MakeName, new { @class = "col-md-2 control-label" })
+            @Html.LabelFor(m => m.Make.MakeName, "Make Name", new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
                 @Html.TextBoxFor(m => m.Make.MakeName, new { @class = "form-control" })
             </div>
@@ -24,35 +26,39 @@
             </div>
         </div>
     }
-
-
+    
     <hr />
-    <div class="row">
-        <div class="table-responsive">
-            <div class="col-md-12">
-                <table class="table table-hover">
-                    <thead style="font-weight: bold">
-                        <tr>
-                            <td align="left">Make</td>
-                            <td align="left">Date Added</td>
-                            <td align="left">User</td>
-                            <td align="left"></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var make in Model.Makes)
-                        {
+
+    @if (Model.Makes.Any())
+    {
+        <div class="row">
+            <div class="table-responsive">
+                <div class="col-md-12">
+                    <table class="table table-hover">
+                        <thead style="font-weight: bold">
                             <tr>
-                                <td>@make.MakeName</td>
-                                <td>@make.DateAdded.ToString("dd/MM/yyyy")</td>
-                                <td>@make.UserName</td>
+                                <td align="left">Make</td>
+                                <td align="left">Date Added</td>
+                                <td align="left">User</td>
+                                <td align="left"></td>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var make in Model.Makes.OrderBy(m => m.MakeName))
+                            {
+                                <tr>
+                                    <td>@make.MakeName</td>
+                                    <td>@make.DateAdded.ToString("MM/dd/yyyy")</td>
+                                    <td>@make.UserName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
+    }
 </div>
+
 
 

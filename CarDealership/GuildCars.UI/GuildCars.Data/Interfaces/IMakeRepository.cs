@@ -1,15 +1,13 @@
 ﻿using GuildCars.Models.Tables;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GuildCars.Data.Interfaces
 {
     public interface IMakeRepository
     {
         List<Make> GetMakes();
-        Make GetMake(string makeName);
+        Make GetMake(int makeId);
+        Make Add(Make make);
+        Make GetMakeByModelId(int id);
     }
 }

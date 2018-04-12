@@ -1,14 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+﻿using GuildCars.UI.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using GuildCars.UI.Models;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace GuildCars.UI.Controllers
 {
@@ -69,6 +66,15 @@ namespace GuildCars.UI.Controllers
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var context = new ApplicationDbContext();
+
+            var disabledRole = (from r in context.Roles where r.Name.Contains("Disabled") select r).FirstOrDefault();
+            var disabledUsers = context.Users.Where(u => u.Roles.Select(r => r.RoleId).Contains(disabledRole.Id));
+
+            if (disabledUsers.Any(u => u.Email == model.Email))
             {
                 return View(model);
             }

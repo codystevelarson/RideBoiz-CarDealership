@@ -1,14 +1,17 @@
 ﻿using GuildCars.BLL.Factories;
+using GuildCars.Models.Enums;
 using GuildCars.Models.Tables;
 using GuildCars.UI.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
-using System.Collections;
+using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using static GuildCars.UI.Controllers.ManageController;
 
 namespace GuildCars.UI.Controllers
 {
@@ -50,10 +53,54 @@ namespace GuildCars.UI.Controllers
             }
         }
 
+        //Used to make a veiw model with filled out select lists
+        private VehicleVM CreateVehicleVM()
+        {
+            VehicleVM model = new VehicleVM();
+            model.VehicleImage = null;
+            var modelManager = CarModelManagerFactory.Create();
+            var makeManager = MakeManagerFactory.Create();
+            var colorManager = ColorManagerFactory.Create();
+            var interiorManager = InteriorManagerFactory.Create();
 
-        
+            //Set Select List Items
+            var modelResponse = modelManager.GetAll();
+            if (modelResponse.Success == true)
+            {
+                model.SetModelListItems(modelResponse.CarModels);
+            }
 
+            var makeResponse = makeManager.GetAll();
+            if (makeResponse.Success == true)
+            {
+                model.SetMakeListItems(makeResponse.Makes);
+            }
 
+            var colorResponse = colorManager.GetAll();
+            if (colorResponse.Success == true)
+            {
+                model.SetColorListItems(colorResponse.Colors);
+            }
+
+            var interiorResponse = interiorManager.GetAll();
+            if (interiorResponse.Success == true)
+            {
+                model.SetInteriorListItems(interiorResponse.Interiors);
+            }
+
+            model.BodyStyle = Enum.GetValues(typeof(BodyStyle)).Cast<BodyStyle>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList();
+            model.Transmissions = Enum.GetValues(typeof(Transmission)).Cast<Transmission>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList();
+
+            return model;
+        }
 
         // GET: Admin
         public ActionResult Index()
@@ -62,61 +109,259 @@ namespace GuildCars.UI.Controllers
         }
 
 
+
+
+        /////////////////////Specials
+
+
         [HttpGet]
         public ActionResult Specials()
         {
-            var model = new SpecialsVM();
+            var model = new SpecialVM();
             var manager = SpecialManagerFactory.Create();
             var response = manager.GetAll();
-            if (response.Success == true)
+            if (response.Success)
             {
                 model.Specials = response.Specials;
+                return View(model);
             }
-            //What to do if success is false?? 
+            return RedirectToAction("Index");
+        }
+
+
+
+        [HttpPost]
+        public ActionResult AddSpecial(SpecialVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var manager = SpecialManagerFactory.Create();
+                if(model.SpecialImage != null)
+                {
+                    if (model.SpecialImage.ContentLength > 0)
+                    {
+                        try
+                        {
+                            model.Special.ImageFileName = Path.GetFileName(model.SpecialImage.FileName);
+
+                            var path = Path.Combine(Server.MapPath("~/Images/Specials/"), model.Special.ImageFileName);
+                            model.SpecialImage.SaveAs(path);
+                        }
+                        catch (Exception e)
+                        {
+                            throw e;
+                        }
+                    }
+                }
+                
+                var response = manager.Add(model.Special);
+                
+            }
+            
+            return RedirectToAction("Specials",model);
+        }
+
+
+        //Change to a DELETE method??
+        [HttpGet]
+        public ActionResult DeleteSpecial(int id)
+        {
+            var manager = SpecialManagerFactory.Create();
+            var special = new Special();
+
+            //Find the special and get the path to delete it's image
+            var findResponse = manager.Get(id);
+            if (findResponse.Success == true)
+            {
+                special = findResponse.Special;
+
+                var path = Path.Combine(Server.MapPath("~/Images/Specials/"), special.ImageFileName);
+                //Delete the special from the database
+                var response = manager.Delete(id);
+                if (response.Success == true)
+                {
+                    FileInfo fi = new FileInfo(path);
+                    if (fi.Exists)
+                    {
+                        try
+                        {
+                            fi.Delete();
+                        }
+                        catch (IOException e)
+                        {
+                            throw e;
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("Specials");
+        }
+
+
+
+
+
+        /////////////////////Vehicles
+
+
+        [HttpGet]
+        public ActionResult Vehicles()
+        {
+            var model = new SearchVM();
+
+            return View(model);
+        }
+
+
+        [HttpGet]
+        public ActionResult AddVehicle()
+        {
+            VehicleVM model = CreateVehicleVM();
+
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult AddSpecial(Special special)
+        public ActionResult AddVehicle(VehicleVM model)
         {
-            //Add a specail to the database
+            var manager = VehicleManagerFactory.Create();
 
-            //return to specials page with all the specials updated
-            var model = new SpecialsVM();
-            var manager = SpecialManagerFactory.Create();
-            var response = manager.GetAll();
-            if (response.Success == true)
+            if (ModelState.IsValid)
             {
-                model.Specials = response.Specials;
+                try
+                {   if(model.VehicleImage != null)
+                    {
+                        if (model.VehicleImage.ContentLength > 0)
+                        {
+                            var path = Path.Combine(Server.MapPath("~/Images/Vehicles/"), $"inventory-{model.Vehicle.VIN}.jpg");
+                            model.Vehicle.ImageFileName = $"inventory-{model.Vehicle.VIN}.jpg";
+
+                            var vehicleResponse = manager.Add(model.Vehicle);
+                            if (vehicleResponse.Success)
+                            {
+                                model.VehicleImage.SaveAs(path);
+                                return RedirectToAction("EditVehicle", new { id = model.Vehicle.VIN });
+                                //return RedirectToAction("Vehicles"); //NEED TO GO TO EDIT BUT IT IS NOT WORKING
+                            }
+                        }
+                    }
+                    
+                    VehicleVM retryAdd = CreateVehicleVM();
+                    retryAdd.Vehicle = model.Vehicle;
+                    return View(retryAdd);
+                }
+                catch (IOException e)
+                {
+                    throw e;
+                }
             }
-            return View("Specials", model);
-        }
+            VehicleVM retryVM = CreateVehicleVM();
+            retryVM.Vehicle = model.Vehicle;
+            retryVM.VehicleImage = model.VehicleImage;
 
-        [HttpDelete]
-        public ActionResult DeleteSpecial(int id)
-        {
-            //Delete the special from the database
-
-
-            //Refresh page with updated specials
-            var model = new SpecialsVM();
-            var manager = SpecialManagerFactory.Create();
-            var response = manager.GetAll();
-            if (response.Success == true)
-            {
-                model.Specials = response.Specials;
-            }
-            return View("Specials", model);
+            return View(retryVM);
         }
 
 
         [HttpGet]
+        public ActionResult EditVehicle(string id)
+        {
+            VehicleVM model = CreateVehicleVM();
+
+            var manager = VehicleManagerFactory.Create();
+            var response = manager.GetVehicle(id);
+
+            if (response.Success == true)
+            {
+                model.Vehicle = response.Vehicle;
+                model.SetSingleMakeAndModelListItem(model.Vehicle.Model);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Vehicles");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditVehicle(VehicleVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.VehicleImage != null)
+                {
+                    try
+                    {
+                        if (model.VehicleImage.ContentLength > 0)
+                        {
+                            var path = Path.Combine(Server.MapPath("~/Images/Vehicles/"), $"iventory-{model.Vehicle.VIN}.jpg");
+                            model.VehicleImage.SaveAs(path);
+                            model.Vehicle.ImageFileName = $"inventory-{model.Vehicle.VIN}.jpg";
+                        }
+                    }
+                    catch (IOException e)
+                    {
+                        throw e;
+                    }
+                }
+                var manager = VehicleManagerFactory.Create();
+                var vehicleResponse = manager.Edit(model.Vehicle);
+                if (vehicleResponse.Success)
+                {
+                    return RedirectToAction("Vehicles");
+                }
+            }
+            VehicleVM retryVM = CreateVehicleVM();
+            retryVM.Vehicle = model.Vehicle;
+            retryVM.VehicleImage = model.VehicleImage;
+
+            return View(retryVM);
+        }
+
+
+        [HttpGet]
+        public ActionResult DeleteVehicle(string id)
+        {
+            var manager = VehicleManagerFactory.Create();
+            var getResponse = manager.GetVehicle(id);
+
+            if (getResponse.Success)
+            {
+                var path = Path.Combine(Server.MapPath("~/Images/Vehicles/"), getResponse.Vehicle.ImageFileName);
+                //Delete the special from the database
+                var response = manager.Delete(id);
+                if (response.Success)
+                {
+                    FileInfo fi = new FileInfo(path);
+                    if (fi.Exists)
+                    {
+                        try
+                        {
+                            fi.Delete();
+                            return RedirectToAction("Vehicles");
+                        }
+                        catch (IOException e)
+                        {
+                            throw e;
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("EditVehicle", id);
+        }
+
+
+
+
+        /////////////////////Makes
+
+        [HttpGet]
         public ActionResult Makes()
         {
-            var model = new MakesVM();
+            var model = new MakeVM();
             var manager = MakeManagerFactory.Create();
             var response = manager.GetAll();
-            if(response.Success == true)
+            if (response.Success)
             {
                 model.Makes = response.Makes;
             }
@@ -124,24 +369,45 @@ namespace GuildCars.UI.Controllers
 
         }
 
-        //Add Make
+        [HttpPost]
+        public ActionResult AddMake(MakeVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Make.UserId = User.Identity.GetUserId();
+                model.Make.UserName = User.Identity.Name;
 
+                var manager = MakeManagerFactory.Create();
+                var addResponse = manager.Add(model.Make);
+                if (addResponse.Success)
+                {
+                    return RedirectToAction("Makes");
+                }
+            }
+            return RedirectToAction("Makes");
+        }
+
+
+
+
+
+        /////////////////////Models
 
 
         [HttpGet]
         public ActionResult Models()
         {
-            var model = new CarModelsVM();
+            var model = new CarModelVM();
             var carModelManager = CarModelManagerFactory.Create();
             var carModelResponse = carModelManager.GetAll();
-            if (carModelResponse.Success == true)
+            if (carModelResponse.Success)
             {
                 model.CarModels = carModelResponse.CarModels;
             }
 
             var makeManager = MakeManagerFactory.Create();
             var makeResponse = makeManager.GetAll();
-            if (makeResponse.Success == true)
+            if (makeResponse.Success)
             {
                 model.Makes = makeResponse.Makes.Select(m => new SelectListItem
                 {
@@ -149,9 +415,28 @@ namespace GuildCars.UI.Controllers
                     Text = m.MakeName
                 });
             }
-
             return View(model);
         }
+
+
+        [HttpPost]
+        public ActionResult AddModel(CarModelVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.CarModel.UserId = User.Identity.GetUserId();
+                model.CarModel.UserName = User.Identity.Name;
+
+                var manager = CarModelManagerFactory.Create();
+                var addResponse = manager.Add(model.CarModel);
+            }
+            return RedirectToAction("Models");
+        }
+
+
+
+
+        /////////////////////Users
 
 
         public ActionResult Users()
@@ -285,11 +570,10 @@ namespace GuildCars.UI.Controllers
             model.LastName = editUser.LastName;
             model.Email = editUser.Email;
 
-            foreach(var role in editUser.Roles)
+            foreach (var role in editUser.Roles)
             {
                 model.Role = role.RoleId;
             }
-
             return View(model);
         }
 
@@ -312,7 +596,7 @@ namespace GuildCars.UI.Controllers
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.Email = model.Email;
-            
+
             //Drop and add roles if changed
             if (!user.Roles.Any(r => r.RoleId == model.Role))
             {
@@ -327,6 +611,38 @@ namespace GuildCars.UI.Controllers
             UserManager.Update(user);
 
             return RedirectToAction("Users");
+        }
+
+
+
+        // GET: /Account/ChangePassword
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/ChangePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+            }
+            AddErrors(result);
+            return View(model);
         }
     }
 }

@@ -1,0 +1,45 @@
+﻿
+@model GuildCars.UI.Models.SearchVM
+
+<div class="row card" style="padding:20px">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <form role="search" id="searchForm">
+                    <div class="row ">
+                        <div class="form-group col-md-3">
+                            <label for="searchBox">Quick Search</label>
+                            <input type="text" name="searchBox" class="form-control" placeholder="Enter make, model, or year" id="vehicleSearch">
+                            <br />
+                            <button type="submit" class="btn btn-primary btn-lg btn-block" style="padding:-10px">Search</button>
+                        </div>
+                        <div class="col-md-4 offset-1 form-group">
+                            <label for="minPrice">Min Price:</label>
+                            @Html.DropDownList("minPrice", Model.Prices, "--Any--", new { @class = "form-control" })
+                            <label for="maxPrice">Max Price:</label>
+                            @Html.DropDownList("maxPrice", Model.Prices, "--Any--", new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="minYear">Min Year:</label>
+                            @Html.DropDownList("minYear", Model.Years, "--Any--", new { @class = "form-control" })
+                            <label for="maxYear">Max Year:</label>
+                            @Html.DropDownList("maxYear", Model.Years, "--Any--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 offset-4">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="container">
+    <div class="col-md-12">
+        <div id="searchResults">
+
+        </div>
+    </div>
+</div>

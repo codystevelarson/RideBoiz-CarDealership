@@ -10,5 +10,6 @@ namespace GuildCars.Models.Responses
     public class SpecialResponse : Response
     {
         public List<Special> Specials { get; set; }
+        public Special Special { get; set; }
     }
 }

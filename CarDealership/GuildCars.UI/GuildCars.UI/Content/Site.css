@@ -2,6 +2,8 @@
     padding: 20px;
 }
 
+
+
 label{
     font-weight: bold;
 }
@@ -10,3 +12,52 @@ table {
     column-fill: auto;
 }
 
+/* Set padding to keep content from hitting the edges */
+/*.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}*/
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+
+.vehicle-detail{
+    font-weight: bold;
+}
+
+.nopadding {
+    padding: 0;
+    margin: 0;
+}
+
+#featuredVehicle {
+    height:300px; 
+    width: 350px;
+}
+
+.carousel-caption {
+    background-color: rgba(34, 152, 238, 0.84);
+    position:absolute;
+}
+
+.vehicleCard {
+    background-color: rgba(31, 63, 255, 0.50);
+    margin: 5px;
+}
+
+.big-checkbox {
+    width: 30px;
+    height: 30px;
+}

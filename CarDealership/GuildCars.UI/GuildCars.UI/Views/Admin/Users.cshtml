@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Users";
 }
+
 <div class="container">
     <h2>Users</h2>
 
@@ -25,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var user in Model.Admins)
+                        @foreach (var user in Model.Admins.OrderBy(u => u.LastName))
                         {
                             <tr class="table-primary">
                                 <td>@user.FirstName</td>
@@ -58,7 +59,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var user in Model.Sales)
+                        @foreach (var user in Model.Sales.OrderBy(u => u.LastName))
                         {
                             <tr class="table-success">
                                 <td>@user.FirstName</td>
@@ -91,7 +92,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var user in Model.Disabled)
+                        @foreach (var user in Model.Disabled.OrderBy(u => u.LastName))
                         {
                             <tr class="table-danger">
                                 <td>@user.FirstName</td>
@@ -107,3 +108,4 @@
         </div>
     </div>
 </div>
+

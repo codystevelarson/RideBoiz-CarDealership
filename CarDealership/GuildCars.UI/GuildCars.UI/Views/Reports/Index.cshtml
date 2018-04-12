@@ -1,11 +1,172 @@
-﻿
+﻿@model GuildCars.UI.Models.SearchVM
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+
+<div class="container">
+
+    <h2>Reports</h2>
+
+    <div class="row">
+        <div class="col-md-3">
+            <button class="btn btn-block btn-primary" id="sales-report">Sales Reports</button>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-block btn-primary" id="inventory-report">Inventory Reports</button>
+        </div>
+    </div>
+
+    <br />
+    <div class="container">
+        <div style="display:none; font-weight:bold" id="sales">
+            <h3>Not Available.</h3>
+
+        </div>
+    </div>
+    <div class="container">
+        <div style="display:none; font-weight:bold" id="total-div">
+            <h2>Total Lot Price: $<span id="total"></span></h2>
+        </div>
+        <div class="col-md-12">
+            <div id="inventory-reports" style="display:none">
+                <div class="table-responsive">
+                    <div class="col-md-12">
+                        <h3>New Inventory</h3>
+                        <table class=" table table-hover">
+                            <thead style="font-weight:bold">
+                                <tr>
+                                    <td align="left">Year</td>
+                                    <td align="left">Make</td>
+                                    <td align="left">Model</td>
+                                    <td align="left">Count</td>
+                                    <td align="left">Stock Value</td>
+                                </tr>
+                            </thead>
+                            <tbody id="new-inventory"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <div class="table-responsive">
+                    <div class="col-md-12">
+                        <h3>Used Inventory</h3>
+                        <table class=" table table-hover">
+                            <thead style="font-weight:bold">
+                                <tr>
+                                    <td align="left">Year</td>
+                                    <td align="left">Make</td>
+                                    <td align="left">Model</td>
+                                    <td align="left">Count</td>
+                                    <td align="left">Stock Value</td>
+                                </tr>
+                            </thead>
+                            <tbody id="used-inventory"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-@Html.ActionLink("Sales Reports", "Sales", "Reports")
 
-@Html.ActionLink("Inventory Reports","Inventory","Reports")
+
+    @section Scripts
+{
+    <script>
+
+    $("#inventory-report").click(function () {
+        $("#total-div").toggle();
+        $("#inventory-reports").toggle();
+        $("#sales").hide();
+        inventoryNew();
+        inventoryUsed();
+        lotValue();
+        return false;
+    });
+
+    $("#sales-report").click(function () {
+        $("#sales").toggle();
+        $("#total-div").hide();
+        $("#inventory-reports").hide();
+        return false;
+    });
+
+
+    function inventoryNew() {
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:50948/api/report/inventoryNew',
+            success: function (data) {
+                $('#new-inventory').empty();
+                $.each(data, function (index, report) {
+                    var html = '<tr>'
+                    html += '<td> ' + report.Year + '</td>'
+                    html += '<td> ' + report.Make + '</td>'
+                    html += '<td> ' + report.Model + '</td>'
+                    html += '<td> ' + report.Count + '</td>'
+                    html += '<td> ' + report.StockValue + '</td>'
+                    html += '</tr>'
+
+                    $('#new-inventory').append(html.toString());
+                })
+            },
+            error: function () {
+                alert('Error performing search, try again later')
+            }
+        })
+    }
+
+            function inventoryUsed() {
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:50948/api/report/inventoryUsed',
+                    success: function (data) {
+                        $('#used-inventory').empty();
+                        $.each(data, function (index, report) {
+                            var html = '<tr>'
+                            html += '<td> ' + report.Year + '</td>'
+                            html += '<td> ' + report.Make + '</td>'
+                            html += '<td> ' + report.Model + '</td>'
+                            html += '<td> ' + report.Count + '</td>'
+                            html += '<td> ' + report.StockValue + '</td>'
+                            html += '</tr>'
+
+                            $('#used-inventory').append(html.toString());
+                        })
+                    },
+                    error: function () {
+                        alert('Error performing search, try again later')
+                    }
+                })
+            }
+
+
+    function lotValue() {
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:50948/api/report/lotValue',
+            success: function (data) {
+                $('#total').empty();
+
+                var total = '<span>' + data + '</span>'
+                $('#total').append(total.toString());
+            },
+            error: function () {
+                alert('Error performing search, try again later')
+            }
+        })
+
+    }
+
+
+
+
+
+        </script>
+    }

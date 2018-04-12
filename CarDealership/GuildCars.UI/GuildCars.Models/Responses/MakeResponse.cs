@@ -10,5 +10,7 @@ namespace GuildCars.Models.Responses
     public class MakeResponse : Response
     {
         public List<Make> Makes { get; set; }
+        public Make Make { get; set; }
     }
 }
+
